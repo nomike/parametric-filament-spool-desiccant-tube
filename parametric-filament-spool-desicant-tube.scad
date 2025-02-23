@@ -29,7 +29,7 @@ calibrate_grid_angular_spacing = true;
 
 explode_width = 10;
 
-module circular_hole_grid(angular_spacing, diameter, length, hole_diameter, hole_fn, grid_spacing) {
+module circular_hole_grid(angular_spacing, diameter, length, hole_diameter, hole_fn, grid_spacing, calibrate_grid_angular_spacing) {
     true_angular_spacing = 180 / (floor(180 / angular_spacing));
     z_step = (hole_diameter / 2) + (grid_spacing / sqrt(2));
     grid_z = (calibrate_grid_angular_spacing) ? 2 : length / z_step;
@@ -57,7 +57,7 @@ module rectangular_hole_grid(x_size, y_size, height, hole_diameter, hole_fn, hol
 }
 
 
-module tube_bottom(tube_diameter, height) {
+module tube_bottom(tube_diameter, height, grid_margin, grid_size, grid_fn, grid_spacing) {
     union() {
         difference() {
             cylinder(d=tube_diameter, h=height);
@@ -78,12 +78,12 @@ module hollow_tube(diameter, length, wall_thickness) {
     }
 }
 
-module tube(diameter, length, wall_thickness, grid_angular_spacing, grid_spacing, hole_diameter, hole_fn, lid_snap_diameter, lid_snap_protrusion) {
+module tube(diameter, length, wall_thickness, grid_angular_spacing, grid_spacing, hole_diameter, hole_fn, lid_snap_diameter, lid_snap_protrusion, calibrate_grid_angular_spacing) {
     union() {
         hollow_tube(diameter, wall_thickness, wall_thickness);
         difference() {
             translate([0, 0, wall_thickness]) hollow_tube(diameter, length - (2 * wall_thickness), wall_thickness);
-            translate([0, 0, wall_thickness]) circular_hole_grid(angular_spacing=grid_angular_spacing, diameter=diameter, length=length, hole_diameter=hole_diameter, hole_fn=hole_fn, grid_spacing=grid_spacing);
+            translate([0, 0, wall_thickness]) circular_hole_grid(angular_spacing=grid_angular_spacing, diameter=diameter, length=length, hole_diameter=hole_diameter, hole_fn=hole_fn, grid_spacing=grid_spacing, calibrate_grid_angular_spacing=calibrate_grid_angular_spacing);
         }
         translate([0, 0, length - margin_top]) hollow_tube(diameter, margin_top, wall_thickness);
     }
@@ -101,8 +101,8 @@ module lid_snap(diameter, lid_snap_diameter, lid_snap_protrusion, lid_snap_inser
     }
 }
 
-module lid(diameter, wall_thickness, lid_thickness, lid_snap_diameter, lid_snap_protrusion, lid_snap_insert, lid_snap_fn) {
-    tube_bottom(tube_diameter=diameter - (2 * wall_thickness), height=lid_thickness);
+module lid(diameter, wall_thickness, lid_thickness, lid_snap_diameter, lid_snap_protrusion, lid_snap_insert, lid_snap_fn,/***/ grid_margin, grid_size, grid_fn, grid_spacing) {
+    tube_bottom(tube_diameter=diameter - (2 * wall_thickness), height=lid_thickness, grid_margin=grid_margin, grid_size=grid_size, grid_fn=grid_fn, grid_spacing=grid_spacing);
     // lid_snaps
     lid_snap(diameter=diameter, lid_snap_diameter=lid_snap_diameter, lid_snap_protrusion=lid_snap_protrusion, lid_snap_insert=lid_snap_insert, lid_snap_fn=lid_snap_fn, wall_thickness=wall_thickness, lid_thickness=lid_thickness);
 
@@ -131,7 +131,7 @@ if (draw_tube) {
 
     difference() {
         // tube
-        tube(diameter=tube_diameter, length=tube_length, wall_thickness=tube_wall_thickness, grid_angular_spacing=grid_angular_spacing, grid_spacing=grid_spacing, hole_diameter=grid_size, hole_fn=grid_fn, lid_snap_diameter=lid_snap_diameter, lid_snap_protrusion=lid_snap_protrusion);
+        tube(diameter=tube_diameter, length=tube_length, wall_thickness=tube_wall_thickness, grid_angular_spacing=grid_angular_spacing, grid_spacing=grid_spacing, hole_diameter=grid_size, hole_fn=grid_fn, lid_snap_diameter=lid_snap_diameter, lid_snap_protrusion=lid_snap_protrusion, calibrate_grid_angular_spacing=calibrate_grid_angular_spacing);
         lid_snap_guide();
         rotate([0, 0, 180]) lid_snap_guide();
     }
@@ -140,5 +140,5 @@ if (draw_tube) {
 // lid
 if (draw_lid) {
     // lid
-    translate([0, 0, tube_length - lid_thickness + explode_width]) lid(tube_diameter - lid_tolerance, tube_wall_thickness, lid_thickness, lid_snap_diameter, lid_snap_protrusion, lid_snap_insert, lid_snap_fn=lid_snap_fn);
+    translate([0, 0, tube_length - lid_thickness + explode_width]) lid(tube_diameter - lid_tolerance, tube_wall_thickness, lid_thickness, lid_snap_diameter, lid_snap_protrusion, lid_snap_insert, lid_snap_fn=lid_snap_fn, grid_margin=grid_margin, grid_size=grid_size, grid_fn=grid_fn, grid_spacing=grid_spacing);
 }
