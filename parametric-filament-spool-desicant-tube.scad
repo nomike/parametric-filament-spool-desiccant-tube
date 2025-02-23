@@ -100,7 +100,7 @@ calibrate_grid_angular_spacing = true;
 explode_width = 6;
 // Number of fragments to use for the circles. Higher values make the circles look rounder but
 // exponentially increase rendering time and filesize.
-$fn = 32;
+$fn = 64;
 
 // used to prevent z-fighting
 EPSILON = 0.01;
