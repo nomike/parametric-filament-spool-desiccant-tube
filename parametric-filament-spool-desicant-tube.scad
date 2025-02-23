@@ -32,12 +32,12 @@ explode_width = 10;
 module circular_hole_grid(angular_spacing, diameter, length, hole_diameter, hole_fn, grid_spacing, calibrate_grid_angular_spacing) {
     true_angular_spacing = 180 / (floor(180 / angular_spacing));
     z_step = (hole_diameter / 2) + (grid_spacing / sqrt(2));
-    grid_z = (calibrate_grid_angular_spacing) ? 2 : length / z_step;
+    grid_z = ((calibrate_grid_angular_spacing) ? 2 : (length / z_step));
 
     for(z = [0 : 1 : grid_z]) {
-        angle_offset = (z % 2 == 0) ? 0 : true_angular_spacing / 2;
+        angle_offset = (((z % 2) == 0) ? 0 : (true_angular_spacing / 2));
         for(angle=[0: true_angular_spacing : 180]) {
-            translate([0, 0, z * z_step]) rotate([0, 90, angle + angle_offset]) translate([0, 0, -(diameter + 2 * EPSILON) / 2]) cylinder(d=hole_diameter, h=diameter + 2 * EPSILON, $fn=hole_fn);
+            translate([0, 0, z * z_step]) rotate([0, 90, angle + angle_offset]) translate([0, 0, -(diameter + (2 * EPSILON)) / 2]) cylinder(d=hole_diameter, h=diameter + (2 * EPSILON), $fn=hole_fn);
         }
     }
 }
@@ -48,10 +48,10 @@ module rectangular_hole_grid(x_size, y_size, height, hole_diameter, hole_fn, hol
     grid_x_dimmension = grid_x * (hole_spacing + hole_diameter);
     grid_y_dimmension = grid_y * (hole_spacing + hole_diameter);
     translate([(hole_diameter + hole_spacing)/2, 0, 0]) for(y=[0: 1 : grid_y * 2]) {
-        x_offset = (y % 2 == 0) ? 0 : -(hole_spacing + hole_diameter)/2;
-        x_add = (y % 2 == 0) ? 0 : 1;
+        x_offset = (((y % 2) == 0) ? 0 : (-(hole_spacing + hole_diameter) / 2));
+        x_add = ((y % 2) == 0) ? 0 : 1;
         translate([x_offset, 0, 0]) for(x=[0: 1 : grid_x + x_add]) {
-            translate([x * (hole_spacing + hole_diameter), y * (hole_spacing + hole_diameter) / 2, 0]) cylinder(d=hole_diameter, h=height, $fn=hole_fn);
+            translate([x * (hole_spacing + hole_diameter), (y * (hole_spacing + hole_diameter)) / 2, 0]) cylinder(d=hole_diameter, h=height, $fn=hole_fn);
         }
     }
 }
@@ -61,11 +61,11 @@ module tube_bottom(tube_diameter, height, grid_margin, grid_size, grid_fn, grid_
     union() {
         difference() {
             cylinder(d=tube_diameter, h=height);
-            translate([0, 0, -EPSILON]) cylinder(d=tube_diameter - grid_margin, h=height + 2 * EPSILON);
+            translate([0, 0, -EPSILON]) cylinder(d=tube_diameter - grid_margin, h=height + (2 * EPSILON));
         }
         difference() {
             cylinder(d=tube_diameter, h=height);
-            translate([-tube_diameter/2, -tube_diameter/2, -EPSILON]) rectangular_hole_grid(x_size=tube_diameter, y_size=tube_diameter, height=height + 2 * EPSILON, hole_diameter=grid_size, hole_fn=grid_fn, hole_spacing=grid_spacing);
+            translate([-tube_diameter/2, -tube_diameter/2, -EPSILON]) rectangular_hole_grid(x_size=tube_diameter, y_size=tube_diameter, height=height + (2 * EPSILON), hole_diameter=grid_size, hole_fn=grid_fn, hole_spacing=grid_spacing);
         }
     }   
 }
@@ -74,7 +74,7 @@ module tube_bottom(tube_diameter, height, grid_margin, grid_size, grid_fn, grid_
 module hollow_tube(diameter, length, wall_thickness) {
     difference() {
         cylinder(d=diameter, h=length);
-        translate([0, 0, -EPSILON]) cylinder(d=diameter - 2 * wall_thickness, h=length + 2 * EPSILON);
+        translate([0, 0, -EPSILON]) cylinder(d=diameter - (2 * wall_thickness), h=length + 2 * EPSILON);
     }
 }
 
@@ -95,9 +95,9 @@ module lid_snap(diameter, lid_snap_diameter, lid_snap_protrusion, lid_snap_inser
         translate([0, 0, (inner_circle_radius/2) + EPSILON]) rotate([0, 270, 0]) cylinder(d=lid_snap_diameter, h=diameter/2, $fn=lid_snap_fn);
         difference () {
             cylinder(d=diameter * 1.1, h=lid_thickness);
-            translate([0, 0, -EPSILON]) cylinder(d=diameter - (wall_thickness / 2), h=lid_thickness + 2 * EPSILON);
+            translate([0, 0, -EPSILON]) cylinder(d=diameter - (wall_thickness / 2), h=lid_thickness + (2 * EPSILON));
         }
-        cylinder(d=diameter - 2 * wall_thickness, h=lid_thickness);
+        cylinder(d=diameter - (2 * wall_thickness), h=lid_thickness);
     }
 }
 
@@ -112,13 +112,13 @@ module lid(diameter, wall_thickness, lid_thickness, lid_snap_diameter, lid_snap_
 
 module lid_snap_guide() {
     rotate([0, 0, -snap_guide_rest_area_angle/2])
-    translate([0, 0, tube_length - lid_snap_diameter * 2 + EPSILON]) {
+    translate([0, 0, tube_length - (lid_snap_diameter * 2) + EPSILON]) {
         difference() {
             union() {
                 rotate_extrude(angle=snap_guide_rest_area_angle) square([(tube_diameter - tube_wall_thickness) / 2, lid_snap_diameter * 2]);
                 rotate_extrude(angle=snap_guide_angle) square([(tube_diameter - tube_wall_thickness) / 2, lid_snap_diameter]);
             }
-            rotate([0, 0, snap_guide_angle - snap_guide_rest_area_angle - 1]) translate([(tube_diameter - tube_wall_thickness) / 2 + snap_guide_nudge_diameter/2 - snap_guide_nudge_width, 0, -EPSILON]) cylinder(d=snap_guide_nudge_diameter, h=lid_snap_diameter + (2 * EPSILON));
+            rotate([0, 0, snap_guide_angle - snap_guide_rest_area_angle - 1]) translate([((tube_diameter - tube_wall_thickness) / 2) + (snap_guide_nudge_diameter / 2) - snap_guide_nudge_width, 0, -EPSILON]) cylinder(d=snap_guide_nudge_diameter, h=lid_snap_diameter + (2 * EPSILON));
         }
     }
 }
