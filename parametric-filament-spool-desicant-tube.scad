@@ -21,8 +21,7 @@ lid_tolerance = 0.2;
 snap_guide_angle = 20;
 snap_guide_rest_area_angle = lid_snap_diameter / outer_circumference * 360;
 snap_guide_nudge_diameter = 2;
-snap_guide_nudge_width = 0.2;
-
+snap_guide_nudge_width = 0.3;
 
 draw_tube = true;
 draw_lid = false;
@@ -113,15 +112,13 @@ module lid(diameter, wall_thickness, lid_thickness, lid_snap_diameter, lid_snap_
 
 module lid_snap_guide() {
     rotate([0, 0, -snap_guide_rest_area_angle/2])
-    echo("lid_snap_diameter: ", lid_snap_diameter);
-    translate([0, 0, tube_length - lid_snap_diameter + epsilon]) {
+    translate([0, 0, tube_length - lid_snap_diameter * 2 + epsilon]) {
         difference() {
             union() {
-                color("Tomato") rotate_extrude(angle=snap_guide_rest_area_angle) square([(tube_diameter - tube_wall_thickness) / 2, lid_snap_diameter]);
-                color("LimeGreen") rotate_extrude(angle=snap_guide_angle) square([(tube_diameter - tube_wall_thickness) / 2, lid_snap_diameter/2]);
+                rotate_extrude(angle=snap_guide_rest_area_angle) square([(tube_diameter - tube_wall_thickness) / 2, lid_snap_diameter * 2]);
+                rotate_extrude(angle=snap_guide_angle) square([(tube_diameter - tube_wall_thickness) / 2, lid_snap_diameter]);
             }
-            color("Orange") rotate([0, 0, snap_guide_angle - snap_guide_rest_area_angle - 1]) translate([(tube_diameter + tube_wall_thickness) / 2 - snap_guide_nudge_width, 0, 0]) cylinder(d=snap_guide_nudge_diameter, h=lid_snap_diameter / 2);
-        
+            rotate([0, 0, snap_guide_angle - snap_guide_rest_area_angle - 1]) translate([(tube_diameter - tube_wall_thickness) / 2 + snap_guide_nudge_diameter/2 - snap_guide_nudge_width, 0, -epsilon]) cylinder(d=snap_guide_nudge_diameter, h=lid_snap_diameter + (2 * epsilon));
         }
     }
 }
