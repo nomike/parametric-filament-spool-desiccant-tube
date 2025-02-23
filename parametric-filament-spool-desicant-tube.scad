@@ -393,9 +393,7 @@ module lid_snap_guide(tube_diameter, tube_length, wall_thickness, snap_guide_res
 */
 if (draw_tube) {
   // bottom of the tube
-  if (!calibrate_grid_angular_spacing) {
-    tube_bottom(tube_diameter = tube_diameter, height = tube_length, grid_margin = grid_margin, grid_size = grid_size, grid_fn = grid_fn, grid_spacing - grid_spacing);
-  }
+tube_bottom(tube_diameter = tube_diameter, height = wall_thickness, grid_margin = grid_margin, grid_size = grid_size, grid_fn = grid_fn, grid_spacing - grid_spacing);
 
   difference() {
     // tube
