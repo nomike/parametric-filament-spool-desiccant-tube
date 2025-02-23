@@ -111,6 +111,31 @@ margin_top = lid_thickness + 1;
 lid_snap_diameter = lid_thickness / 2;
 snap_guide_rest_area_angle = lid_snap_diameter / outer_circumference * 360;
 
+/*
+    Module: circular_hole_grid
+
+    Description:
+        Creates a grid of square holes on a cylindrical surface. The holes are arranged in a
+        staggered pattern.
+
+    Parameters:
+        - angular_spacing: The angular distance between holes in degrees.
+        - diameter: The diameter of the cylindrical surface.
+        - length: The length of the cylindrical surface.
+        - hole_diameter: The diameter of each hole.
+        - hole_fn: The number of facets used to approximate the circular holes.
+        - grid_spacing: The distance between rows of holes.
+        - calibrate_grid_angular_spacing: Boolean flag to adjust the grid angular spacing.
+
+    Internal Variables:
+        - true_angular_spacing: Adjusted angular spacing to ensure even distribution of holes.
+        - z_step: The vertical distance between rows of holes.
+        - grid_z: The number of rows of holes.
+
+    Usage:
+        This module can be used to create a pattern of holes on a cylindrical surface, which can be
+        useful for designs requiring ventilation or weight reduction.
+*/
 module circular_hole_grid(angular_spacing, diameter, length, hole_diameter, hole_fn, grid_spacing, calibrate_grid_angular_spacing) {
   true_angular_spacing = 180 / (floor(180 / angular_spacing));
   z_step = (hole_diameter / 2) + (grid_spacing / sqrt(2));
@@ -127,6 +152,24 @@ module circular_hole_grid(angular_spacing, diameter, length, hole_diameter, hole
   }
 }
 
+/*
+    Module: rectangular_hole_grid
+
+    Description:
+        Creates a grid of square holes within a rectangular area. The holes are arranged in a
+        staggered pattern.
+
+    Parameters:
+        x_size        - The width of the rectangular area.
+        y_size        - The height of the rectangular area.
+        height        - The height of the cylindrical holes.
+        hole_diameter - The diameter of each cylindrical hole.
+        hole_fn       - The number of facets used to approximate the cylindrical hole.
+        hole_spacing  - The spacing between the edges of adjacent holes.
+
+    Example Usage:
+        rectangular_hole_grid(100, 50, 10, 5, 50, 10);
+*/
 module rectangular_hole_grid(x_size, y_size, height, hole_diameter, hole_fn, hole_spacing) {
   grid_x = x_size / (hole_spacing + hole_diameter);
   grid_y = y_size / (hole_spacing + hole_diameter);
@@ -144,7 +187,26 @@ module rectangular_hole_grid(x_size, y_size, height, hole_diameter, hole_fn, hol
     }
 }
 
+/*
+    Module: tube_bottom
 
+    Description:
+        Creates the bottom part of a tube with a grid pattern of holes.
+
+    Parameters:
+        - tube_diameter: Diameter of the tube.
+        - height: Height of the tube.
+        - grid_margin: Margin for the grid pattern.
+        - grid_size: Diameter of the holes in the grid pattern.
+        - grid_fn: Number of facets used to approximate the holes.
+        - grid_spacing: Spacing between the holes in the grid pattern.
+
+    Usage:
+        tube_bottom(tube_diameter, height, grid_margin, grid_size, grid_fn, grid_spacing);
+
+    Example:
+        tube_bottom(50, 10, 2, 5, 16, 10);
+*/
 module tube_bottom(tube_diameter, height, grid_margin, grid_size, grid_fn, grid_spacing) {
   union() {
     difference() {
@@ -160,7 +222,24 @@ module tube_bottom(tube_diameter, height, grid_margin, grid_size, grid_fn, grid_
   }
 }
 
-
+/*
+    Module: hollow_tube
+    Description: Creates a hollow cylindrical tube with specified outer diameter, length, and
+    wall thickness.
+    
+    Parameters:
+        - diameter: The outer diameter of the tube.
+        - length: The length (height) of the tube.
+        - wall_thickness: The thickness of the tube's wall.
+    
+    Usage:
+        hollow_tube(diameter, length, wall_thickness);
+    
+    Example:
+        hollow_tube(20, 50, 2);
+        // This creates a hollow tube with an outer diameter of 20 mm, a length of 50 mm, and a
+        // wall thickness of 2 mm.
+*/
 module hollow_tube(diameter, length, wall_thickness) {
   difference() {
     cylinder(d = diameter, h = length);
@@ -169,6 +248,30 @@ module hollow_tube(diameter, length, wall_thickness) {
   }
 }
 
+/*
+    Module: tube
+
+    Description:
+        Creates a parametric tube with a grid of circular holes. The tube is hollow and has a
+        specified wall thickness. 
+        The grid of holes can be calibrated.
+
+    Parameters:
+        - diameter: The outer diameter of the tube.
+        - length: The total length of the tube.
+        - wall_thickness: The thickness of the tube walls.
+        - grid_angular_spacing: The angular spacing between the holes in the grid.
+        - grid_spacing: The spacing between the holes in the grid along the length of the tube.
+        - hole_diameter: The diameter of the holes in the grid.
+        - hole_fn: The number of facets used to approximate the circular holes.
+        - lid_snap_diameter: The diameter for the lid snap feature.
+        - calibrate_grid_angular_spacing: Temporarily set this to true while calibrating the
+                                          grid_angular_spacing to reduce render-time.
+
+    Usage:
+        tube(diameter, length, wall_thickness, grid_angular_spacing, grid_spacing, hole_diameter,
+        hole_fn, lid_snap_diameter, calibrate_grid_angular_spacing);
+*/
 module tube(diameter, length, wall_thickness, grid_angular_spacing, grid_spacing, hole_diameter, hole_fn, lid_snap_diameter, calibrate_grid_angular_spacing) {
   union() {
     hollow_tube(diameter, wall_thickness, wall_thickness);
@@ -183,6 +286,22 @@ module tube(diameter, length, wall_thickness, grid_angular_spacing, grid_spacing
   }
 }
 
+/*
+    Module: lid_snap
+
+    Description:
+        This module adds snaps to the lid, so it can be secured to the tube with a short twist. 
+
+    Parameters:
+        - diameter: The outer diameter of the lid.
+        - lid_snap_diameter: The diameter of the snap-fit feature.
+        - lid_snap_fn: The number of facets to use for the snap-fit feature.
+        - wall_thickness: The thickness of the wall of the lid.
+        - lid_thickness: The thickness of the lid itself.
+
+    Usage:
+        lid_snap(diameter, lid_snap_diameter, lid_snap_fn, wall_thickness, lid_thickness);
+*/
 module lid_snap(diameter, lid_snap_diameter, lid_snap_fn, wall_thickness, lid_thickness) {
   inner_circle_radius = lid_snap_diameter * cos(180 / lid_snap_fn);
   difference() {
@@ -198,6 +317,26 @@ module lid_snap(diameter, lid_snap_diameter, lid_snap_fn, wall_thickness, lid_th
   }
 }
 
+/*
+    Module: lid
+
+    Description:
+        Creates the lid.
+
+    Parameters:
+        - diameter: The overall diameter of the lid.
+        - wall_thickness: The thickness of the wall of the lid.
+        - lid_thickness: The thickness of the lid itself.
+        - lid_snap_diameter: The diameter of the snap feature on the lid.
+        - lid_snap_fn: The number of facets used to approximate the snap feature.
+        - grid_margin: The margin around the grid pattern on the tube bottom.
+        - grid_size: The size of the grid pattern on the tube bottom.
+        - grid_fn: The number of facets used to approximate the grid pattern.
+        - grid_spacing: The spacing between elements of the grid pattern.
+
+    Usage:
+        lid(diameter, wall_thickness, lid_thickness, lid_snap_diameter, lid_snap_fn, grid_margin, grid_size, grid_fn, grid_spacing);
+*/
 module lid(diameter, wall_thickness, lid_thickness, lid_snap_diameter, lid_snap_fn, grid_margin, grid_size, grid_fn, grid_spacing) {
   tube_bottom(tube_diameter = diameter - (2 * wall_thickness), height = lid_thickness, grid_margin = grid_margin, grid_size = grid_size, grid_fn = grid_fn, grid_spacing = grid_spacing);
   // lid_snaps
@@ -208,6 +347,28 @@ module lid(diameter, wall_thickness, lid_thickness, lid_snap_diameter, lid_snap_
 
 }
 
+/*
+    Module: lid_snap_guide
+
+    Description:
+        This module adds a snap guide for the lid to the tube.
+        The lid's snaps slide into this guide and the lid can be secured with a short twist.
+
+    Parameters:
+        - tube_diameter: The outer diameter of the tube.
+        - tube_length: The length of the tube.
+        - wall_thickness: The thickness of the tube wall.
+        - snap_guide_rest_area_angle: The angle of the rest area for the snap guide.
+        - lid_snap_diameter: The diameter of the snap feature on the lid.
+        - snap_guide_angle: The angle of the snap guide.
+        - snap_guide_nudge_diameter: The diameter of the nudge feature on the snap guide.
+        - snap_guide_nudge_width: The width of the nudge feature on the snap guide.
+
+    Usage:
+        This module can be used to create a snap guide for a lid that fits onto a tube with
+        specified dimensions and angles. The snap guide helps ensure that the lid snaps securely
+        onto the tube.
+*/
 module lid_snap_guide(tube_diameter, tube_length, wall_thickness, snap_guide_rest_area_angle, lid_snap_diameter, snap_guide_angle, snap_guide_nudge_diameter, snap_guide_nudge_width) {
   rotate([0, 0, -snap_guide_rest_area_angle / 2])
     translate([0, 0, tube_length - (lid_snap_diameter * 2) + EPSILON]) {
@@ -225,6 +386,11 @@ module lid_snap_guide(tube_diameter, tube_length, wall_thickness, snap_guide_res
     }
 }
 
+/*
+    Main
+
+    Contstructs the tube and lid.
+*/
 if (draw_tube) {
   // bottom of the tube
   if (!calibrate_grid_angular_spacing) {
