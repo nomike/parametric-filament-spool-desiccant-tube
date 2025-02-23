@@ -111,14 +111,8 @@ margin_top = lid_thickness + 1;
 lid_snap_diameter = lid_thickness / 2;
 snap_guide_rest_area_angle = lid_snap_diameter / outer_circumference * 360;
 
-module circular_hole_grid(
-    angular_spacing,
-    diameter,
-    length,
-    hole_diameter,
-    hole_fn,
-    grid_spacing,
-    calibrate_grid_angular_spacing) {
+module circular_hole_grid(angular_spacing, diameter, length, hole_diameter, hole_fn, grid_spacing,
+                          calibrate_grid_angular_spacing) {
     true_angular_spacing = 180 / (floor(180 / angular_spacing));
     z_step = (hole_diameter / 2) + (grid_spacing / sqrt(2));
     grid_z = ((calibrate_grid_angular_spacing) ? 2 : (length / z_step));
@@ -131,12 +125,7 @@ module circular_hole_grid(
     }
 }
 
-module rectangular_hole_grid(
-    x_size,
-    y_size,
-    height,
-    hole_diameter,
-    hole_fn, hole_spacing) {
+module rectangular_hole_grid(x_size, y_size, height, hole_diameter, hole_fn, hole_spacing) {
     grid_x = x_size / (hole_spacing + hole_diameter);
     grid_y = y_size / (hole_spacing + hole_diameter);
     grid_x_dimmension = grid_x * (hole_spacing + hole_diameter);
@@ -151,12 +140,7 @@ module rectangular_hole_grid(
 }
 
 
-module tube_bottom(
-    tube_diameter,
-    height, grid_margin, 
-    grid_size, 
-    grid_fn, 
-    grid_spacing) {
+module tube_bottom(tube_diameter,height, grid_margin, grid_size, grid_fn, grid_spacing) {
     union() {
         difference() {
             cylinder(d=tube_diameter, h=height);
@@ -170,26 +154,15 @@ module tube_bottom(
 }
 
 
-module hollow_tube(
-    diameter, 
-    length, 
-    wall_thickness) {
+module hollow_tube(diameter, length, wall_thickness) {
     difference() {
         cylinder(d=diameter, h=length);
         translate([0, 0, -EPSILON]) cylinder(d=diameter - (2 * wall_thickness), h=length + 2 * EPSILON);
     }
 }
 
-module tube(
-    diameter, 
-    length, 
-    wall_thickness, 
-    grid_angular_spacing, 
-    grid_spacing, 
-    hole_diameter, 
-    hole_fn, 
-    lid_snap_diameter, 
-    calibrate_grid_angular_spacing) {
+module tube(diameter, length, wall_thickness, grid_angular_spacing, grid_spacing, hole_diameter,
+            hole_fn, lid_snap_diameter, calibrate_grid_angular_spacing) {
     union() {
         hollow_tube(diameter, wall_thickness, wall_thickness);
         difference() {
@@ -200,12 +173,7 @@ module tube(
     }
 }
 
-module lid_snap(
-    diameter, 
-    lid_snap_diameter, 
-    lid_snap_fn, 
-    wall_thickness, 
-    lid_thickness) {
+module lid_snap(diameter, lid_snap_diameter, lid_snap_fn, wall_thickness, lid_thickness) {
     inner_circle_radius = lid_snap_diameter * cos(180/lid_snap_fn);
     difference() {
         translate([0, 0, (inner_circle_radius/2) + EPSILON]) rotate([0, 270, 0]) cylinder(d=lid_snap_diameter, h=diameter/2, $fn=lid_snap_fn);
@@ -217,16 +185,8 @@ module lid_snap(
     }
 }
 
-module lid(
-    diameter, 
-    wall_thickness, 
-    lid_thickness, 
-    lid_snap_diameter, 
-    lid_snap_fn, 
-    grid_margin, 
-    grid_size, 
-    grid_fn, 
-    grid_spacing) {
+module lid(diameter, wall_thickness, lid_thickness, lid_snap_diameter, lid_snap_fn, grid_margin,
+           grid_size, grid_fn, grid_spacing) {
     tube_bottom(tube_diameter=diameter - (2 * wall_thickness), height=lid_thickness, grid_margin=grid_margin, grid_size=grid_size, grid_fn=grid_fn, grid_spacing=grid_spacing);
     // lid_snaps
     lid_snap(diameter=diameter, lid_snap_diameter=lid_snap_diameter, lid_snap_fn=lid_snap_fn, wall_thickness=wall_thickness, lid_thickness=lid_thickness);
@@ -235,16 +195,9 @@ module lid(
 
 }
 
-module lid_snap_guide(
-    tube_diameter,
-    tube_length, 
-    wall_thickness, 
-    snap_guide_rest_area_angle, 
-    lid_snap_diameter,
-    snap_guide_angle,
-    snap_guide_nudge_diameter,
-    snap_guide_nudge_width
-    ) {
+module lid_snap_guide(tube_diameter, tube_length, wall_thickness, snap_guide_rest_area_angle,
+                      lid_snap_diameter, snap_guide_angle, snap_guide_nudge_diameter,
+                      snap_guide_nudge_width) {
     rotate([0, 0, -snap_guide_rest_area_angle/2])
     translate([0, 0, tube_length - (lid_snap_diameter * 2) + EPSILON]) {
         difference() {
