@@ -33,7 +33,7 @@ changes to look good and be printable.
 */
 
 // Size of a square hole in the air-flow grid. This is from corner to corner.
-grid_size = 10.5;
+grid_size = 2.5;
 //TODO: Calculation is wrong in the code below.
 // Sacing between the holes in the air-flow grid.
 grid_spacing = 0.5; // 0.1
