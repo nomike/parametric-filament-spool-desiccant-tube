@@ -90,7 +90,7 @@ draw_lid = true;
 // This is temporarily enables to only render the first two lines of grid-holes on the tube,
 // so that the rendering performance is improved and you can calibrate grid_angular_spacing.
 // Set this to false once you're done with that calibration.
-calibrate_grid_angular_spacing = true;
+calibrate_grid_angular_spacing = false;
 
 
 /* [Other parameters] */
