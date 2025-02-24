@@ -1,11 +1,11 @@
-Parametric filament spool desiccant tube.
+Parametric filament spool desiccant container.
 
-This tube can be filled with loose desiccant pearls and placed in the center hole of a filament
+This container can be filled with loose desiccant pearls and placed in the center hole of a filament
 spool, to keep it dry during storage.
-It has a dense grid of square holes on all sides, which allows air to flow through the tube and
+It has a dense grid of square holes on all sides, which allows air to flow through the container and
 reach the desiccant pearls.
 
-The lid can be put on the tube and secured by a short twist.
+The lid can be put on the container and secured by a short twist.
 
 #### Models
 
@@ -30,4 +30,4 @@ other, you can generate them with OpenSCAD or the thibgiverse customizer.
 
 #### GitHub
 
-<https://github.com/nomike/parametric-filament-spool-desiccant-tube>
+<https://github.com/nomike/parametric-filament-spool-desiccant-container>

@@ -1,1 +1,1 @@
-No supports needed. Print tube and lid as two separate objects.
+No supports needed. Print container and lid as two separate objects.

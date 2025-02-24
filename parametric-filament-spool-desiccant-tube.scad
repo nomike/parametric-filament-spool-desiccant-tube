@@ -1,32 +1,32 @@
 /**
-Parametric filament spool desiccant tube.
+Parametric filament spool desiccant container.
 
-This tube can be filled with loose desiccant pearls and placed in the center hole of a filament spool,
+This container can be filled with loose desiccant pearls and placed in the center hole of a filament spool,
 to keep it dry during storage.
-It has a dense grid of square holes on all sides, which allows air to flow through the tube and reach the desiccant pearls.
+It has a dense grid of square holes on all sides, which allows air to flow through the container and reach the desiccant pearls.
 
-The lid can be put on the tube and secured by a short twist.
+The lid can be put on the container and secured by a short twist.
 */
 
 
-/* [Tube dimmensions] */
+/* [container dimmensions] */
 /*
-The tube is the main body of the design.
+The container is the main body of the design.
 */
 
-// Overall diameter of the tube. Use calipers to measure your spool. Substract 0.2 mm as a safety
+// Overall diameter of the container. Use calipers to measure your spool. Substract 0.2 mm as a safety
 // margin.
-tube_diameter = 52; // .1
+container_diameter = 52; // .1
 
-// Length of the tube. This should be the same as the height of your spool.
-tube_length = 67; // .1
-// Thickness of the tube walls. 2 mm is a good value for a sturdy tube, 1 mm is too thin already.
+// Length of the container. This should be the same as the height of your spool.
+container_length = 67; // .1
+// Thickness of the container walls. 2 mm is a good value for a sturdy container, 1 mm is too thin already.
 wall_thickness = 2; //.1
 
 /* [Air-flow grid dimmensions] */
 /*
-The air-flow grid is a dense grid of holes on all sides of the tube.
-This allows air to flow through the tube and reach the desiccant pearls.
+The air-flow grid is a dense grid of holes on all sides of the container.
+This allows air to flow through the container and reach the desiccant pearls.
 The holes are designed to be squares, but they could be any regular polygon by tweaking the
 grid_fn parameter. Values other than 4 are not tested yet and will reuire some code
 changes to look good and be printable.
@@ -43,20 +43,20 @@ grid_margin = 2;
 // Number of sides of the grid-holes. Only 4 (squares) look good at the moment.
 grid_fn = 4; // 1
 
-// Spacing for the grid holes on the side-wall of the tube. This is the angle between the holes.
-// The value of this parameter depends on the grid_size and the tube_diameter, so whenever you
+// Spacing for the grid holes on the side-wall of the container. This is the angle between the holes.
+// The value of this parameter depends on the grid_size and the container_diameter, so whenever you
 // change those, you should recalibrate this parameter.
 grid_angular_spacing = 7; //TODO: Calculate this automatically
 
 /* [Lid dimmensions] */
 /*
-The lid is a separate piece that can be put on the tube and secured by a short twist.
-If has two snaps on the side. These fit into guides on the tube and allows the lid to be secured
+The lid is a separate piece that can be put on the container and secured by a short twist.
+If has two snaps on the side. These fit into guides on the container and allows the lid to be secured
 by a short twist.
 */
 
 lid_thickness = 5; // .1
-// Makes the lid slightly smaller so that it can fit inside the tube.
+// Makes the lid slightly smaller so that it can fit inside the container.
 lid_tolerance = 0.2; // .1
 
 // must be odd to ensure the snap has equal width through all axis.
@@ -64,7 +64,7 @@ lid_snap_fn = 7; // 1
 
 /* [Snap Guides] */
 /*
-The snap guides are small ... on the inside of the tube. They guide the snaps of the lid and
+The snap guides are small ... on the inside of the container. They guide the snaps of the lid and
 allow it to be secured by a short twist.
 Thers is a small nudge towards the end of the guide which holds the lid in place.
 The nudge is designed a small cylinder.
@@ -81,13 +81,13 @@ snap_guide_nudge_diameter = 2;
 snap_guide_nudge_width = 0.3;
 
 /* [Features] */
-// Whether to draw the tube or not.
-draw_tube = true;
-// Whether to draw the lid or not.
-draw_lid = true;
+// Whether to render the container or not.
+render_container = true;
+// Whether to render the lid or not.
+render_lid = true;
 
 // Rendering the whole design with small grid-holes is slow and makes the OpenSCAD editor laggy.
-// This is temporarily enables to only render the first two lines of grid-holes on the tube,
+// This is temporarily enables to only render the first two lines of grid-holes on the container,
 // so that the rendering performance is improved and you can calibrate grid_angular_spacing.
 // Set this to false once you're done with that calibration.
 calibrate_grid_angular_spacing = false;
@@ -95,8 +95,8 @@ calibrate_grid_angular_spacing = false;
 
 /* [Other parameters] */
 
-// The lid is rendered above the tube to be able to be split into separate objects in the slicer.
-// This parameter controls how much the lid is separated from the tube.
+// The lid is rendered above the container to be able to be split into separate objects in the slicer.
+// This parameter controls how much the lid is separated from the container.
 explode_width = 6;
 // Number of fragments to use for the circles. Higher values make the circles look rounder but
 // exponentially increase rendering time and filesize.
@@ -106,7 +106,7 @@ $fn = $preview ? 20 : 64;
 EPSILON = 0.01;
 
 /* [Calculated values] */
-outer_circumference = tube_diameter * PI;
+outer_circumference = container_diameter * PI;
 margin_top = lid_thickness + 1;
 lid_snap_diameter = lid_thickness / 2;
 snap_guide_rest_area_angle = lid_snap_diameter / outer_circumference * 360;
@@ -188,59 +188,59 @@ module rectangular_hole_grid(x_size, y_size, height, hole_diameter, hole_fn, hol
 }
 
 /*
-    Module: tube_bottom
+    Module: container_bottom
 
     Description:
-        Creates the bottom part of a tube with a grid pattern of holes.
+        Creates the bottom part of a container with a grid pattern of holes.
 
     Parameters:
-        - tube_diameter: Diameter of the tube.
-        - height: Height of the tube.
+        - container_diameter: Diameter of the container.
+        - height: Height of the container.
         - grid_margin: Margin for the grid pattern.
         - grid_size: Diameter of the holes in the grid pattern.
         - grid_fn: Number of facets used to approximate the holes.
         - grid_spacing: Spacing between the holes in the grid pattern.
 
     Usage:
-        tube_bottom(tube_diameter, height, grid_margin, grid_size, grid_fn, grid_spacing);
+        container_bottom(container_diameter, height, grid_margin, grid_size, grid_fn, grid_spacing);
 
     Example:
-        tube_bottom(50, 10, 2, 5, 16, 10);
+        container_bottom(50, 10, 2, 5, 16, 10);
 */
-module tube_bottom(tube_diameter, height, grid_margin, grid_size, grid_fn, grid_spacing) {
+module container_bottom(container_diameter, height, grid_margin, grid_size, grid_fn, grid_spacing) {
   union() {
     difference() {
-      cylinder(d = tube_diameter, h = height);
+      cylinder(d = container_diameter, h = height);
       translate([0, 0, -EPSILON])
-        cylinder(d = tube_diameter - grid_margin, h = height + (2 * EPSILON));
+        cylinder(d = container_diameter - grid_margin, h = height + (2 * EPSILON));
     }
     difference() {
-      cylinder(d = tube_diameter, h = height);
-      translate([-tube_diameter / 2, -tube_diameter / 2, -EPSILON])
-        rectangular_hole_grid(x_size = tube_diameter, y_size = tube_diameter, height = height + (2 * EPSILON), hole_diameter = grid_size, hole_fn = grid_fn, hole_spacing = grid_spacing);
+      cylinder(d = container_diameter, h = height);
+      translate([-container_diameter / 2, -container_diameter / 2, -EPSILON])
+        rectangular_hole_grid(x_size = container_diameter, y_size = container_diameter, height = height + (2 * EPSILON), hole_diameter = grid_size, hole_fn = grid_fn, hole_spacing = grid_spacing);
     }
   }
 }
 
 /*
-    Module: hollow_tube
-    Description: Creates a hollow cylindrical tube with specified outer diameter, length, and
+    Module: hollow_container
+    Description: Creates a hollow cylindrical container with specified outer diameter, length, and
     wall thickness.
     
     Parameters:
-        - diameter: The outer diameter of the tube.
-        - length: The length (height) of the tube.
-        - wall_thickness: The thickness of the tube's wall.
+        - diameter: The outer diameter of the container.
+        - length: The length (height) of the container.
+        - wall_thickness: The thickness of the container's wall.
     
     Usage:
-        hollow_tube(diameter, length, wall_thickness);
+        hollow_container(diameter, length, wall_thickness);
     
     Example:
-        hollow_tube(20, 50, 2);
-        // This creates a hollow tube with an outer diameter of 20 mm, a length of 50 mm, and a
+        hollow_container(20, 50, 2);
+        // This creates a hollow container with an outer diameter of 20 mm, a length of 50 mm, and a
         // wall thickness of 2 mm.
 */
-module hollow_tube(diameter, length, wall_thickness) {
+module hollow_container(diameter, length, wall_thickness) {
   difference() {
     cylinder(d = diameter, h = length);
     translate([0, 0, -EPSILON])
@@ -249,19 +249,19 @@ module hollow_tube(diameter, length, wall_thickness) {
 }
 
 /*
-    Module: tube
+    Module: container
 
     Description:
-        Creates a parametric tube with a grid of circular holes. The tube is hollow and has a
+        Creates a parametric container with a grid of circular holes. The container is hollow and has a
         specified wall thickness. 
         The grid of holes can be calibrated.
 
     Parameters:
-        - diameter: The outer diameter of the tube.
-        - length: The total length of the tube.
-        - wall_thickness: The thickness of the tube walls.
+        - diameter: The outer diameter of the container.
+        - length: The total length of the container.
+        - wall_thickness: The thickness of the container walls.
         - grid_angular_spacing: The angular spacing between the holes in the grid.
-        - grid_spacing: The spacing between the holes in the grid along the length of the tube.
+        - grid_spacing: The spacing between the holes in the grid along the length of the container.
         - hole_diameter: The diameter of the holes in the grid.
         - hole_fn: The number of facets used to approximate the circular holes.
         - lid_snap_diameter: The diameter for the lid snap feature.
@@ -269,20 +269,20 @@ module hollow_tube(diameter, length, wall_thickness) {
                                           grid_angular_spacing to reduce render-time.
 
     Usage:
-        tube(diameter, length, wall_thickness, grid_angular_spacing, grid_spacing, hole_diameter,
+        container(diameter, length, wall_thickness, grid_angular_spacing, grid_spacing, hole_diameter,
         hole_fn, lid_snap_diameter, calibrate_grid_angular_spacing);
 */
-module tube(diameter, length, wall_thickness, grid_angular_spacing, grid_spacing, hole_diameter, hole_fn, lid_snap_diameter, calibrate_grid_angular_spacing) {
+module container(diameter, length, wall_thickness, grid_angular_spacing, grid_spacing, hole_diameter, hole_fn, lid_snap_diameter, calibrate_grid_angular_spacing) {
   union() {
-    hollow_tube(diameter, wall_thickness, wall_thickness);
+    hollow_container(diameter, wall_thickness, wall_thickness);
     difference() {
       translate([0, 0, wall_thickness])
-        hollow_tube(diameter, length - (2 * wall_thickness), wall_thickness);
+        hollow_container(diameter, length - (2 * wall_thickness), wall_thickness);
       translate([0, 0, wall_thickness])
         circular_hole_grid(angular_spacing = grid_angular_spacing, diameter = diameter, length = length, hole_diameter = hole_diameter, hole_fn = hole_fn, grid_spacing = grid_spacing, calibrate_grid_angular_spacing = calibrate_grid_angular_spacing);
     }
     translate([0, 0, length - margin_top])
-      hollow_tube(diameter, margin_top, wall_thickness);
+      hollow_container(diameter, margin_top, wall_thickness);
   }
 }
 
@@ -290,7 +290,7 @@ module tube(diameter, length, wall_thickness, grid_angular_spacing, grid_spacing
     Module: lid_snap
 
     Description:
-        This module adds snaps to the lid, so it can be secured to the tube with a short twist. 
+        This module adds snaps to the lid, so it can be secured to the container with a short twist. 
 
     Parameters:
         - diameter: The outer diameter of the lid.
@@ -329,8 +329,8 @@ module lid_snap(diameter, lid_snap_diameter, lid_snap_fn, wall_thickness, lid_th
         - lid_thickness: The thickness of the lid itself.
         - lid_snap_diameter: The diameter of the snap feature on the lid.
         - lid_snap_fn: The number of facets used to approximate the snap feature.
-        - grid_margin: The margin around the grid pattern on the tube bottom.
-        - grid_size: The size of the grid pattern on the tube bottom.
+        - grid_margin: The margin around the grid pattern on the container bottom.
+        - grid_size: The size of the grid pattern on the container bottom.
         - grid_fn: The number of facets used to approximate the grid pattern.
         - grid_spacing: The spacing between elements of the grid pattern.
 
@@ -338,7 +338,7 @@ module lid_snap(diameter, lid_snap_diameter, lid_snap_fn, wall_thickness, lid_th
         lid(diameter, wall_thickness, lid_thickness, lid_snap_diameter, lid_snap_fn, grid_margin, grid_size, grid_fn, grid_spacing);
 */
 module lid(diameter, wall_thickness, lid_thickness, lid_snap_diameter, lid_snap_fn, grid_margin, grid_size, grid_fn, grid_spacing) {
-  tube_bottom(tube_diameter = diameter - (2 * wall_thickness), height = lid_thickness, grid_margin = grid_margin, grid_size = grid_size, grid_fn = grid_fn, grid_spacing = grid_spacing);
+  container_bottom(container_diameter = diameter - (2 * wall_thickness), height = lid_thickness, grid_margin = grid_margin, grid_size = grid_size, grid_fn = grid_fn, grid_spacing = grid_spacing);
   // lid_snaps
   lid_snap(diameter = diameter, lid_snap_diameter = lid_snap_diameter, lid_snap_fn = lid_snap_fn, wall_thickness = wall_thickness, lid_thickness = lid_thickness);
 
@@ -351,13 +351,13 @@ module lid(diameter, wall_thickness, lid_thickness, lid_snap_diameter, lid_snap_
     Module: lid_snap_guide
 
     Description:
-        This module adds a snap guide for the lid to the tube.
+        This module adds a snap guide for the lid to the container.
         The lid's snaps slide into this guide and the lid can be secured with a short twist.
 
     Parameters:
-        - tube_diameter: The outer diameter of the tube.
-        - tube_length: The length of the tube.
-        - wall_thickness: The thickness of the tube wall.
+        - container_diameter: The outer diameter of the container.
+        - container_length: The length of the container.
+        - wall_thickness: The thickness of the container wall.
         - snap_guide_rest_area_angle: The angle of the rest area for the snap guide.
         - lid_snap_diameter: The diameter of the snap feature on the lid.
         - snap_guide_angle: The angle of the snap guide.
@@ -365,22 +365,22 @@ module lid(diameter, wall_thickness, lid_thickness, lid_snap_diameter, lid_snap_
         - snap_guide_nudge_width: The width of the nudge feature on the snap guide.
 
     Usage:
-        This module can be used to create a snap guide for a lid that fits onto a tube with
+        This module can be used to create a snap guide for a lid that fits onto a container with
         specified dimensions and angles. The snap guide helps ensure that the lid snaps securely
-        onto the tube.
+        onto the container.
 */
-module lid_snap_guide(tube_diameter, tube_length, wall_thickness, snap_guide_rest_area_angle, lid_snap_diameter, snap_guide_angle, snap_guide_nudge_diameter, snap_guide_nudge_width) {
+module lid_snap_guide(container_diameter, container_length, wall_thickness, snap_guide_rest_area_angle, lid_snap_diameter, snap_guide_angle, snap_guide_nudge_diameter, snap_guide_nudge_width) {
   rotate([0, 0, -snap_guide_rest_area_angle / 2])
-    translate([0, 0, tube_length - (lid_snap_diameter * 2) + EPSILON]) {
+    translate([0, 0, container_length - (lid_snap_diameter * 2) + EPSILON]) {
       difference() {
         union() {
           rotate_extrude(angle = snap_guide_rest_area_angle)
-            square([(tube_diameter - wall_thickness) / 2, lid_snap_diameter * 2]);
+            square([(container_diameter - wall_thickness) / 2, lid_snap_diameter * 2]);
           rotate_extrude(angle = snap_guide_angle)
-            square([(tube_diameter - wall_thickness) / 2, lid_snap_diameter]);
+            square([(container_diameter - wall_thickness) / 2, lid_snap_diameter]);
         }
         rotate([0, 0, snap_guide_angle - snap_guide_rest_area_angle - 1])
-          translate([((tube_diameter - wall_thickness) / 2) + (snap_guide_nudge_diameter / 2) - snap_guide_nudge_width, 0, -EPSILON])
+          translate([((container_diameter - wall_thickness) / 2) + (snap_guide_nudge_diameter / 2) - snap_guide_nudge_width, 0, -EPSILON])
             cylinder(d = snap_guide_nudge_diameter, h = lid_snap_diameter + (2 * EPSILON));
       }
     }
@@ -389,24 +389,24 @@ module lid_snap_guide(tube_diameter, tube_length, wall_thickness, snap_guide_res
 /*
     Main
 
-    Contstructs the tube and lid.
+    Contstructs the container and lid.
 */
-if (draw_tube) {
-  // bottom of the tube
-tube_bottom(tube_diameter = tube_diameter, height = wall_thickness, grid_margin = grid_margin, grid_size = grid_size, grid_fn = grid_fn, grid_spacing = grid_spacing);
+if (render_container) {
+  // bottom of the container
+container_bottom(container_diameter = container_diameter, height = wall_thickness, grid_margin = grid_margin, grid_size = grid_size, grid_fn = grid_fn, grid_spacing = grid_spacing);
 
   difference() {
-    // tube
-    tube(diameter = tube_diameter, length = tube_length, wall_thickness = wall_thickness, grid_angular_spacing = grid_angular_spacing, grid_spacing = grid_spacing, hole_diameter = grid_size, hole_fn = grid_fn, lid_snap_diameter = lid_snap_diameter, calibrate_grid_angular_spacing = calibrate_grid_angular_spacing);
-    lid_snap_guide(tube_diameter = tube_diameter, tube_length = tube_length, wall_thickness = wall_thickness, snap_guide_rest_area_angle = snap_guide_rest_area_angle, lid_snap_diameter = lid_snap_diameter, snap_guide_angle = snap_guide_angle, snap_guide_nudge_diameter = snap_guide_nudge_diameter, snap_guide_nudge_width = snap_guide_nudge_width);
+    // container
+    container(diameter = container_diameter, length = container_length, wall_thickness = wall_thickness, grid_angular_spacing = grid_angular_spacing, grid_spacing = grid_spacing, hole_diameter = grid_size, hole_fn = grid_fn, lid_snap_diameter = lid_snap_diameter, calibrate_grid_angular_spacing = calibrate_grid_angular_spacing);
+    lid_snap_guide(container_diameter = container_diameter, container_length = container_length, wall_thickness = wall_thickness, snap_guide_rest_area_angle = snap_guide_rest_area_angle, lid_snap_diameter = lid_snap_diameter, snap_guide_angle = snap_guide_angle, snap_guide_nudge_diameter = snap_guide_nudge_diameter, snap_guide_nudge_width = snap_guide_nudge_width);
     rotate([0, 0, 180])
-      lid_snap_guide(tube_diameter = tube_diameter, tube_length = tube_length, wall_thickness = wall_thickness, snap_guide_rest_area_angle = snap_guide_rest_area_angle, lid_snap_diameter = lid_snap_diameter, snap_guide_angle = snap_guide_angle, snap_guide_nudge_diameter = snap_guide_nudge_diameter, snap_guide_nudge_width = snap_guide_nudge_width);
+      lid_snap_guide(container_diameter = container_diameter, container_length = container_length, wall_thickness = wall_thickness, snap_guide_rest_area_angle = snap_guide_rest_area_angle, lid_snap_diameter = lid_snap_diameter, snap_guide_angle = snap_guide_angle, snap_guide_nudge_diameter = snap_guide_nudge_diameter, snap_guide_nudge_width = snap_guide_nudge_width);
   }
 }
 
 // lid
-if (draw_lid) {
+if (render_lid) {
   // lid
-  translate([0, 0, tube_length - lid_thickness + explode_width])
-    lid(tube_diameter - lid_tolerance, wall_thickness, lid_thickness, lid_snap_diameter, lid_snap_fn = lid_snap_fn, grid_margin = grid_margin, grid_size = grid_size, grid_fn = grid_fn, grid_spacing = grid_spacing);
+  translate([0, 0, container_length - lid_thickness + explode_width])
+    lid(container_diameter - lid_tolerance, wall_thickness, lid_thickness, lid_snap_diameter, lid_snap_fn = lid_snap_fn, grid_margin = grid_margin, grid_size = grid_size, grid_fn = grid_fn, grid_spacing = grid_spacing);
 }
