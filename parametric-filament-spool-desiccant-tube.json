@@ -1,29 +1,75 @@
 {
     "fileFormatVersion": "1",
     "parameterSets": {
-        "Model A": {
-            "tube_diameter": "52",
-            "tube_length": "67"
+        "Model A - lid": {
+            "container_diameter": "52",
+            "container_length": "67",
+            "render_container": "false"
         },
-        "Model B": {
-            "tube_diameter": "52",
-            "tube_length": "56"
+        "Model A - container": {
+            "container_diameter": "52",
+            "container_length": "67",
+            "render_lid": "false"
         },
-        "Model C": {
-            "tube_diameter": "51",
-            "tube_length": "69"
+        "Model B - lid": {
+            "container_diameter": "52",
+            "container_length": "56",
+            "render_container": "false"
         },
-        "Model D": {
-            "tube_diameter": "51",
-            "tube_length": "122"
+        "Model B - container": {
+            "container_diameter": "52",
+            "container_length": "56",
+            "render_lid": "false"
         },
-        "Model E": {
-            "tube_diameter": "55",
-            "tube_length": "68"
+        "Model C - lid": {
+            "container_diameter": "51",
+            "container_length": "69",
+            "render_container": "false"
         },
-        "Model F": {
-            "tube_diameter": "52",
-            "tube_length": "65"
+        "Model C - container": {
+            "container_diameter": "51",
+            "container_length": "69",
+            "render_lid": "false"
+        },
+        "Model D - lid": {
+            "container_diameter": "51",
+            "container_length": "122",
+            "render_container": "false"
+        },
+        "Model D - container": {
+            "container_diameter": "51",
+            "container_length": "122",
+            "render_lid": "false"
+        },
+        "Model E - lid": {
+            "container_diameter": "55",
+            "container_length": "68",
+            "render_container": "false"
+        },
+        "Model E - container": {
+            "container_diameter": "55",
+            "container_length": "68",
+            "render_lid": "false"
+        },
+        "Model F - lid": {
+            "container_diameter": "52",
+            "container_length": "65",
+            "render_container": "false"
+        },
+        "Model F - container": {
+            "container_diameter": "52",
+            "container_length": "65",
+            "render_lid": "false"
+        },
+        "Model G - lid": {
+            "container_diameter": "52",
+            "container_length": "52",
+            "render_container": "false"
+        },
+        "Model G - container": {
+            "container_diameter": "52",
+            "container_length": "52",
+            "render_lid": "false"
         }
     }
 }

@@ -23,6 +23,7 @@ other, you can generate them with OpenSCAD or the thibgiverse customizer.
 | Type D     | Prusament 2 kg   |
 | Type E     | Polymaker 1 kg   |
 | Type F     | Flashforge 1 kg  |
+| Type G     | Filaflex 0.5 kg  |
 
 #### Thingiverse
 
