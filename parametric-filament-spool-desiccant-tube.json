@@ -4,6 +4,26 @@
         "Model A": {
             "tube_diameter": "52",
             "tube_length": "67"
+        },
+        "Model B": {
+            "tube_diameter": "52",
+            "tube_length": "56"
+        },
+        "Model C": {
+            "tube_diameter": "51",
+            "tube_length": "69"
+        },
+        "Model D": {
+            "tube_diameter": "51",
+            "tube_length": "122"
+        },
+        "Model E": {
+            "tube_diameter": "55",
+            "tube_length": "68"
+        },
+        "Model F": {
+            "tube_diameter": "52",
+            "tube_length": "65"
         }
     }
 }
