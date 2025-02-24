@@ -57,18 +57,21 @@ by a short twist.
 
 lid_thickness = 5; // .1
 // Makes the lid slightly smaller so that it can fit inside the container.
-lid_tolerance = 0.6; // .1
+lid_tolerance = 0.4; // .1
 
-// must be odd to ensure the snap has equal width through all axis.
-lid_snap_fn = 7; // 1
-
-/* [Snap Guides] */
+/* [Snap Snaps] */
 /*
 The snap guides are small ... on the inside of the container. They guide the snaps of the lid and
 allow it to be secured by a short twist.
 Thers is a small nudge towards the end of the guide which holds the lid in place.
 The nudge is designed a small cylinder.
 */
+
+// must be odd to ensure the snap has equal width through all axis.
+lid_snap_fn = 7; // 1
+
+// There should be at last 3 lid-snaps.
+lid_snap_count = 3; // 1
 
 // Amount of degrees the lid needs to be twisted to be secured.
 snap_guide_angle = 20;
@@ -340,11 +343,9 @@ module lid_snap(diameter, lid_snap_diameter, lid_snap_fn, wall_thickness, lid_th
 module lid(diameter, wall_thickness, lid_thickness, lid_snap_diameter, lid_snap_fn, grid_margin, grid_size, grid_fn, grid_spacing, lid_tolerance) {
   container_bottom(container_diameter = diameter - (2 * wall_thickness) - lid_tolerance, height = lid_thickness, grid_margin = grid_margin, grid_size = grid_size, grid_fn = grid_fn, grid_spacing = grid_spacing);
   // lid_snaps
-  lid_snap(diameter = diameter, lid_snap_diameter = lid_snap_diameter, lid_snap_fn = lid_snap_fn, wall_thickness = wall_thickness, lid_thickness = lid_thickness, lid_tolerance);
-
-  rotate([0, 0, 180])
-    lid_snap(diameter = diameter, lid_snap_diameter = lid_snap_diameter, lid_snap_fn = lid_snap_fn, wall_thickness = wall_thickness, lid_thickness = lid_thickness, lid_tolerance);
-
+  for (i = [0:1:lid_snap_count - 1]) {
+    rotate([0, 0, (360 / lid_snap_count) * i]) lid_snap(diameter = diameter, lid_snap_diameter = lid_snap_diameter, lid_snap_fn = lid_snap_fn, wall_thickness = wall_thickness, lid_thickness = lid_thickness, lid_tolerance);
+  }
 }
 
 /*
@@ -398,9 +399,9 @@ container_bottom(container_diameter = container_diameter, height = wall_thicknes
   difference() {
     // container
     container(diameter = container_diameter, length = container_length, wall_thickness = wall_thickness, grid_angular_spacing = grid_angular_spacing, grid_spacing = grid_spacing, hole_diameter = grid_size, hole_fn = grid_fn, lid_snap_diameter = lid_snap_diameter, calibrate_grid_angular_spacing = calibrate_grid_angular_spacing);
-    lid_snap_guide(container_diameter = container_diameter, container_length = container_length, wall_thickness = wall_thickness, snap_guide_rest_area_angle = snap_guide_rest_area_angle, lid_snap_diameter = lid_snap_diameter, snap_guide_angle = snap_guide_angle, snap_guide_nudge_diameter = snap_guide_nudge_diameter, snap_guide_nudge_width = snap_guide_nudge_width);
-    rotate([0, 0, 180])
-      lid_snap_guide(container_diameter = container_diameter, container_length = container_length, wall_thickness = wall_thickness, snap_guide_rest_area_angle = snap_guide_rest_area_angle, lid_snap_diameter = lid_snap_diameter, snap_guide_angle = snap_guide_angle, snap_guide_nudge_diameter = snap_guide_nudge_diameter, snap_guide_nudge_width = snap_guide_nudge_width);
+    for (i = [0:1:lid_snap_count - 1]) {
+      rotate([0, 0, (360 / lid_snap_count) * i]) lid_snap_guide(container_diameter = container_diameter, container_length = container_length, wall_thickness = wall_thickness, snap_guide_rest_area_angle = snap_guide_rest_area_angle, lid_snap_diameter = lid_snap_diameter, snap_guide_angle = snap_guide_angle, snap_guide_nudge_diameter = snap_guide_nudge_diameter, snap_guide_nudge_width = snap_guide_nudge_width);
+    }
   }
 }
 
