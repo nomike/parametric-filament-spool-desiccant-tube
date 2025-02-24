@@ -1,9 +1,9 @@
 /**
-Parametric filament spool desicant tube.
+Parametric filament spool desiccant tube.
 
-This tube can be filled with loose desicant pearls and placed in the center hole of a filament spool,
+This tube can be filled with loose desiccant pearls and placed in the center hole of a filament spool,
 to keep it dry during storage.
-It has a dense grid of square holes on all sides, which allows air to flow through the tube and reach the desicant pearls.
+It has a dense grid of square holes on all sides, which allows air to flow through the tube and reach the desiccant pearls.
 
 The lid can be put on the tube and secured by a short twist.
 */
@@ -26,7 +26,7 @@ wall_thickness = 2; //.1
 /* [Air-flow grid dimmensions] */
 /*
 The air-flow grid is a dense grid of holes on all sides of the tube.
-This allows air to flow through the tube and reach the desicant pearls.
+This allows air to flow through the tube and reach the desiccant pearls.
 The holes are designed to be squares, but they could be any regular polygon by tweaking the
 grid_fn parameter. Values other than 4 are not tested yet and will reuire some code
 changes to look good and be printable.
