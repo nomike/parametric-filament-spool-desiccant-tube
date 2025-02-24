@@ -57,7 +57,7 @@ by a short twist.
 
 lid_thickness = 5; // .1
 // Makes the lid slightly smaller so that it can fit inside the container.
-lid_tolerance = 0.2; // .1
+lid_tolerance = 0.6; // .1
 
 // must be odd to ensure the snap has equal width through all axis.
 lid_snap_fn = 7; // 1
