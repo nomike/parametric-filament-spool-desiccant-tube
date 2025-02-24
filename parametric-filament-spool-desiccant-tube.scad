@@ -302,18 +302,18 @@ module container(diameter, length, wall_thickness, grid_angular_spacing, grid_sp
     Usage:
         lid_snap(diameter, lid_snap_diameter, lid_snap_fn, wall_thickness, lid_thickness);
 */
-module lid_snap(diameter, lid_snap_diameter, lid_snap_fn, wall_thickness, lid_thickness) {
+module lid_snap(diameter, lid_snap_diameter, lid_snap_fn, wall_thickness, lid_thickness, lid_tolerance) {
   inner_circle_radius = lid_snap_diameter * cos(180 / lid_snap_fn);
   difference() {
     translate([0, 0, (inner_circle_radius / 2) + EPSILON])
       rotate([0, 270, 0])
-        cylinder(d = lid_snap_diameter, h = diameter / 2, $fn = lid_snap_fn);
-    difference() {
+        color("Tomato") cylinder(d = lid_snap_diameter, h = diameter / 2, $fn = lid_snap_fn);
+    color("LimeGreen") difference() {
       cylinder(d = diameter * 1.1, h = lid_thickness);
       translate([0, 0, -EPSILON])
-        cylinder(d = diameter - (wall_thickness / 2), h = lid_thickness + (2 * EPSILON));
+        cylinder(d = diameter - wall_thickness - lid_tolerance, h = lid_thickness + (2 * EPSILON));
     }
-    cylinder(d = diameter - (2 * wall_thickness), h = lid_thickness);
+    cylinder(d = diameter - (2 * wall_thickness) - lid_tolerance, h = lid_thickness);
   }
 }
 
@@ -337,13 +337,13 @@ module lid_snap(diameter, lid_snap_diameter, lid_snap_fn, wall_thickness, lid_th
     Usage:
         lid(diameter, wall_thickness, lid_thickness, lid_snap_diameter, lid_snap_fn, grid_margin, grid_size, grid_fn, grid_spacing);
 */
-module lid(diameter, wall_thickness, lid_thickness, lid_snap_diameter, lid_snap_fn, grid_margin, grid_size, grid_fn, grid_spacing) {
-  container_bottom(container_diameter = diameter - (2 * wall_thickness), height = lid_thickness, grid_margin = grid_margin, grid_size = grid_size, grid_fn = grid_fn, grid_spacing = grid_spacing);
+module lid(diameter, wall_thickness, lid_thickness, lid_snap_diameter, lid_snap_fn, grid_margin, grid_size, grid_fn, grid_spacing, lid_tolerance) {
+  container_bottom(container_diameter = diameter - (2 * wall_thickness) - lid_tolerance, height = lid_thickness, grid_margin = grid_margin, grid_size = grid_size, grid_fn = grid_fn, grid_spacing = grid_spacing);
   // lid_snaps
-  lid_snap(diameter = diameter, lid_snap_diameter = lid_snap_diameter, lid_snap_fn = lid_snap_fn, wall_thickness = wall_thickness, lid_thickness = lid_thickness);
+  lid_snap(diameter = diameter, lid_snap_diameter = lid_snap_diameter, lid_snap_fn = lid_snap_fn, wall_thickness = wall_thickness, lid_thickness = lid_thickness, lid_tolerance);
 
   rotate([0, 0, 180])
-    lid_snap(diameter = diameter, lid_snap_diameter = lid_snap_diameter, lid_snap_fn = lid_snap_fn, wall_thickness = wall_thickness, lid_thickness = lid_thickness);
+    lid_snap(diameter = diameter, lid_snap_diameter = lid_snap_diameter, lid_snap_fn = lid_snap_fn, wall_thickness = wall_thickness, lid_thickness = lid_thickness, lid_tolerance);
 
 }
 
@@ -408,5 +408,5 @@ container_bottom(container_diameter = container_diameter, height = wall_thicknes
 if (render_lid) {
   // lid
   translate([0, 0, container_length - lid_thickness + explode_width])
-    lid(container_diameter - lid_tolerance, wall_thickness, lid_thickness, lid_snap_diameter, lid_snap_fn = lid_snap_fn, grid_margin = grid_margin, grid_size = grid_size, grid_fn = grid_fn, grid_spacing = grid_spacing);
+    lid(container_diameter, wall_thickness, lid_thickness, lid_snap_diameter, lid_snap_fn = lid_snap_fn, grid_margin = grid_margin, grid_size = grid_size, grid_fn = grid_fn, grid_spacing = grid_spacing, lid_tolerance = lid_tolerance);
 }
