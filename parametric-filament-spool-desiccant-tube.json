@@ -1,0 +1,9 @@
+{
+    "fileFormatVersion": "1",
+    "parameterSets": {
+        "Model A": {
+            "tube_diameter": "52",
+            "tube_length": "67"
+        }
+    }
+}
