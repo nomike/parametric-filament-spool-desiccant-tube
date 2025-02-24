@@ -78,7 +78,7 @@ snap_guide_nudge_diameter = 2;
 
 // How much the nudge cylinder should stick out of the guide. Fine-tune this if the lid is too loose
 // or too hard to snap into place.
-snap_guide_nudge_width = 0.3;
+snap_guide_nudge_width = 0.4;
 
 /* [Features] */
 // Whether to render the container or not.
