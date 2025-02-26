@@ -38,7 +38,7 @@ customizer Alternatively you can also manually set parameters in the parameter-j
 
 The rendering performance in OpenSCAD is terrible. Rendering one type can easily take an hour or
 more. However. newer versions of OpenSCAD have a new "manifold" backend, which cuts rendering time
-down to a fraction of a second.
+down to a few seconds.
 
 Unfortunately there hasn't been a release of OpenSCAD since 2021, so you have to get the source from
 github and compile it yourself.
