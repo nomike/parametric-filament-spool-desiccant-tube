@@ -27,7 +27,7 @@ other, you can generate them with OpenSCAD or the thibgiverse customizer.
 
 #### Thingiverse
 
-<https://thingiverse.com/thing:>
+<https://thingiverse.com/thing:6961859>
 
 #### GitHub
 
